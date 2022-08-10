@@ -1,6 +1,7 @@
 package com.naynna.mirai.plugin.AutiRefresh
 
 import com.google.gson.Gson
+import moe.naynna.mirai.plugin.AutiRefresh.Config
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
 import net.mamoe.mirai.contact.PermissionDeniedException
