@@ -1,15 +1,16 @@
 plugins {
-    val kotlinVersion = "1.6.10"
+    val kotlinVersion = "1.7.0"
     kotlin("jvm") version kotlinVersion
-    kotlin("plugin.serialization") version kotlinVersion
-
-    id("net.mamoe.mirai-console") version "2.11.1"
+    id("net.mamoe.mirai-console") version "2.12.1"
 }
 
-group = "org.example"
-version = "0.1.0"
+group = "moe.naynna"
+version = "0.0.1"
 
 repositories {
-    maven("https://maven.aliyun.com/repository/public") // 阿里云国内代理仓库
+    mavenLocal()
     mavenCentral()
+}
+dependencies{
+    implementation("com.google.code.gson:gson:2.9.1")
 }
