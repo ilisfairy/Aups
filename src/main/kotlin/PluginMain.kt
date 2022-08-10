@@ -1,93 +1,113 @@
-package org.example.mirai.plugin
+package com.naynna.mirai.plugin.AutiRefresh
 
+import com.google.gson.Gson
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
-import net.mamoe.mirai.event.EventChannel
+import net.mamoe.mirai.contact.PermissionDeniedException
 import net.mamoe.mirai.event.GlobalEventChannel
-import net.mamoe.mirai.event.events.BotInvitedJoinGroupRequestEvent
-import net.mamoe.mirai.event.events.FriendMessageEvent
 import net.mamoe.mirai.event.events.GroupMessageEvent
-import net.mamoe.mirai.event.events.NewFriendRequestEvent
-import net.mamoe.mirai.event.globalEventChannel
-import net.mamoe.mirai.message.data.Image
-import net.mamoe.mirai.message.data.Image.Key.queryUrl
-import net.mamoe.mirai.message.data.PlainText
-import net.mamoe.mirai.utils.info
-
-/**
- * 使用 kotlin 版请把
- * `src/main/resources/META-INF.services/net.mamoe.mirai.console.plugin.jvm.JvmPlugin`
- * 文件内容改成 `org.example.mirai.plugin.PluginMain` 也就是当前主类全类名
- *
- * 使用 kotlin 可以把 java 源集删除不会对项目有影响
- *
- * 在 `settings.gradle.kts` 里改构建的插件名称、依赖库和插件版本
- *
- * 在该示例下的 [JvmPluginDescription] 修改插件名称，id和版本，etc
- *
- * 可以使用 `src/test/kotlin/RunMirai.kt` 在 ide 里直接调试，
- * 不用复制到 mirai-console-loader 或其他启动器中调试
- */
-
+import net.mamoe.mirai.message.data.MessageSource
+import net.mamoe.mirai.message.data.MessageSource.Key.recall
+import java.io.File
+import java.util.*
+import java.util.Calendar
 object PluginMain : KotlinPlugin(
     JvmPluginDescription(
-        id = "org.example.mirai-example",
-        name = "插件示例",
-        version = "0.1.0"
-    ) {
-        author("作者名称或联系方式")
-        info(
-            """
-            这是一个测试插件, 
-            在这里描述插件的功能和用法等.
-        """.trimIndent()
+        id = "com.naynna.AutiRefresh",
+        name = "AutiRefresh",
+        version = "0.0.1"
         )
-        // author 和 info 可以删除.
-    }
 ) {
+    data class Msg(
+        val hash: Int,
+        var num: Int,
+        val source: ArrayList<MessageSource> = ArrayList()
+    )
+    private val STCache:MutableMap<Long, Msg> = mutableMapOf()
+    val LTCache = ArrayList<Msg>()
+    fun getTime(hour:Int, min:Int, sec:Int): Date {
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.HOUR_OF_DAY, hour)
+        calendar.set(Calendar.MINUTE, min)
+        calendar.set(Calendar.SECOND, sec)
+        return calendar.time
+    }
     override fun onEnable() {
-        logger.info { "Plugin loaded" }
-        //配置文件目录 "${dataFolder.absolutePath}/"
-        val eventChannel = GlobalEventChannel.parentScope(this)
-        eventChannel.subscribeAlways<GroupMessageEvent>{
-            //群消息
-            //复读示例
-            if (message.contentToString().startsWith("复读")) {
-                group.sendMessage(message.contentToString().replace("复读", ""))
+        val file = File("${configFolder.absolutePath}\\config.json")
+        logger.info("配置文件目录${configFolder.absolutePath}\\config.json")
+        val config = if(file.isFile && file.exists())
+            Gson().fromJson(file.readText(), Config::class.java)
+        else {
+            logger.warning("找不到配置文件, 使用默认文件")
+            Config(null, null, null, null, null)
+        }
+        val n = config.max ?: 4
+        val h = config.hour ?: 20
+        val m = config.min ?: 0
+        val s = config.sec ?: 0
+        val period:Long = 86400000
+        Timer().schedule(object:TimerTask(){
+            override fun run() {
+                logger.warning("清空长缓存")
+                LTCache.clear()
             }
-            if (message.contentToString() == "hi") {
-                //群内发送
-                group.sendMessage("hi")
-                //向发送者私聊发送消息
-                sender.sendMessage("hi")
-                //不继续处理
+        }, getTime(h, m, s), period)
+        logger.info("清空缓存任务启动于${getTime(h, m, s)}，每隔${period}ms执行一次")
+        logger.info("撤回阈值为$n")
+        GlobalEventChannel.subscribeAlways<GroupMessageEvent> {
+            val msg = this.message.serializeToMiraiCode().hashCode()
+            for(l in LTCache){
+                if(l.hash == msg){
+                    try{
+                        this.message.recall()
+                    }catch (e: PermissionDeniedException){
+                        logger.error("权限不足")
+                    }catch(e: IllegalStateException ){
+                        logger.error("该消息已被撤回")
+                    }
+                    l.num += 1
+                    return@subscribeAlways
+                }
+            }
+            if(!STCache.containsKey(this.group.id)){
+                STCache[this.group.id] = Msg(msg, 1)
+                STCache[this.group.id]!!.source.add(this.message[MessageSource]!!)
                 return@subscribeAlways
-            }
-            //分类示例
-            message.forEach {
-                //循环每个元素在消息里
-                if (it is Image) {
-                    //如果消息这一部分是图片
-                    val url = it.queryUrl()
-                    group.sendMessage("图片，下载地址$url")
+            }else{
+                val temp = STCache[this.group.id]!!
+                if(temp.hash == msg) {
+                    if (temp.num == n - 1) {
+                        if(config.notification == true)
+                            this.group.owner.sendMessage("[QQ群${this.group.id}]开始刷屏[${this.message.serializeToMiraiCode()}]")
+                        try {
+                            for(i in 1 until n - 1){
+                                try {
+                                    temp.source[i].recall()
+                                } catch (e: PermissionDeniedException) {
+                                    logger.error("权限不足")
+                                } catch (e: IllegalStateException) {
+                                    logger.error("该消息已被撤回")
+                                }
+                            }
+                            this.message.recall()
+                        } catch (e: PermissionDeniedException) {
+                            logger.error("权限不足")
+                        } catch (e: IllegalStateException) {
+                            logger.error("该消息已被撤回")
+                        }
+                        LTCache.add(Msg(msg,n))
+                        return@subscribeAlways
+                    }else{
+                        temp.num += 1
+                        temp.source.add(this.message[MessageSource]!!)
+                        return@subscribeAlways
+                    }
+                }else{
+                    STCache[this.group.id] = Msg(msg,1)
+                    STCache[this.group.id]!!.source.add(this.message[MessageSource]!!)
+                    return@subscribeAlways
                 }
-                if (it is PlainText) {
-                    //如果消息这一部分是纯文本
-                    group.sendMessage("纯文本，内容:${it.content}")
-                }
             }
-        }
-        eventChannel.subscribeAlways<FriendMessageEvent>{
-            //好友信息
-            sender.sendMessage("hi")
-        }
-        eventChannel.subscribeAlways<NewFriendRequestEvent>{
-            //自动同意好友申请
-            accept()
-        }
-        eventChannel.subscribeAlways<BotInvitedJoinGroupRequestEvent>{
-            //自动同意加群申请
-            accept()
         }
     }
 }
