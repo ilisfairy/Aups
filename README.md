@@ -1,5 +1,11 @@
-# mirai-console-plugin-template
+# AutiRefresh
 
-[Mirai Console](https://github.com/mamoe/mirai-console) 插件模板, 使用 Kotlin + Gradle.
+一个用于监测群消息刷屏并撤回的插件
 
-[如何使用](https://github.com/project-mirai/how-to-use-plugin-template)
+***WIP***
+
+## TODO
+
+- [x] 检测撤回
+- [ ] 配置设置
+- [ ] 撤回并禁言
