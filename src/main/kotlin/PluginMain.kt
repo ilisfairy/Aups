@@ -26,7 +26,7 @@ object PluginMain : KotlinPlugin(
     )
     private val STCache:MutableMap<Long, Msg> = mutableMapOf()
     val LTCache = ArrayList<Msg>()
-    fun getTime(hour:Int, min:Int, sec:Int): Date {
+    private fun getTime(hour:Int, min:Int, sec:Int): Date {
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.HOUR_OF_DAY, hour)
         calendar.set(Calendar.MINUTE, min)
