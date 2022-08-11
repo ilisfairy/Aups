@@ -14,7 +14,7 @@ import java.io.File
 import java.util.*
 object PluginMain : KotlinPlugin(
     JvmPluginDescription(
-        id = "com.naynna.AutiRefresh",
+        id = "moe.naynna.AutiRefresh",
         name = "AutiRefresh",
         version = "0.0.1"
         )
