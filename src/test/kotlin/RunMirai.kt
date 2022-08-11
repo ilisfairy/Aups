@@ -1,6 +1,6 @@
 @file:OptIn(ConsoleExperimentalApi::class)
 
-package org.example.mirai.plugin
+package moe.naynna.mirai.plugin
 
 import moe.naynna.mirai.plugin.AutiRefresh.PluginMain
 import net.mamoe.mirai.alsoLogin
