@@ -12,6 +12,9 @@ import net.mamoe.mirai.message.data.MessageSource
 import net.mamoe.mirai.message.data.MessageSource.Key.recall
 import java.io.File
 import java.util.*
+
+
+
 object PluginMain : KotlinPlugin(
     JvmPluginDescription(
         id = "moe.naynna.AutiRefresh",
@@ -79,7 +82,7 @@ object PluginMain : KotlinPlugin(
                 if(temp.hash == msg) {
                     if (temp.num == n - 1) {
                         if(config.notification == true)
-                            this.group.owner.sendMessage("[QQ群${this.group.id}]开始刷屏[${this.message.serializeToMiraiCode()}]")
+                            this.group.owner.sendMessage("[QQ群${this.group.id}]开始搞事情[${this.message.serializeToMiraiCode()}]")
                         try {
                             for(i in 1 until n - 1){
                                 try {
