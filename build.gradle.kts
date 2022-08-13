@@ -10,7 +10,7 @@ group = "moe.naynna"
 version = "0.1.0"
 
 repositories {
-    mavenLocal()
+    mavenLocal("https://maven.aliyun.com/repository/public")
     mavenCentral()
 }
 dependencies{
