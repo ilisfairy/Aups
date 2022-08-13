@@ -35,10 +35,10 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
       - name: Build with Gradle
-        run: ./gradlew build
+        run: ./gradlew buildPlugin
       
       - name: CI
         uses: actions/upload-artifact@v3
         with: 
           name: snapshot
-          path: build/libs/*.jar
+          path: build/mirai/*.jar
