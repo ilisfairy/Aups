@@ -30,7 +30,7 @@ jobs:
           distribution: 'temurin'
       
       - name: Gradle Wrapper Validation
-        uses: gradle/wrapper-validation-action@v1.0.3
+        uses: gradle/wrapper-validation-action@v1.0.4
         
       - name: Make gradlew executable
         run: chmod +x ./gradlew
@@ -41,4 +41,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with: 
           name: snapshot
-          path: build/mirai/*.jar
+          path: build/libs/*.jar
