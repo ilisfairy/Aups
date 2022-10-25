@@ -14,6 +14,6 @@ repositories {
     mavenCentral()
 }
 dependencies{
-    implementation("com.google.code.gson:gson:2.9.1")
+    implementation("com.google.code.gson:gson:2.10")
     implementation(kotlin("stdlib-jdk8"))
 }
