@@ -1,4 +1,4 @@
-package moe.nyanna.mirai.plugin.AutireFresh
+package moe.nyadoki.mirai.plugin.AutiRefresh
 
 import net.mamoe.mirai.console.data.AutoSavePluginData
 import net.mamoe.mirai.console.data.value

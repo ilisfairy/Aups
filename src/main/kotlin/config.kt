@@ -1,4 +1,4 @@
-package moe.naynna.mirai.plugin.AutiRefresh
+package moe.nyadoki.mirai.plugin.AutiRefresh
 
 data class Config(
     val max:Int?,

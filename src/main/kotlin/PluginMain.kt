@@ -1,6 +1,6 @@
 @file:Suppress("AutiRefresh")
 
-package moe.naynna.mirai.plugin.AutiRefresh
+package moe.nyadoki.mirai.plugin.AutiRefresh
 
 import com.google.gson.Gson
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
@@ -17,7 +17,7 @@ import java.util.*
 
 object PluginMain : KotlinPlugin(
     JvmPluginDescription(
-        id = "moe.naynna.AutiRefresh",
+        id = "moe.nyadoki.AutiRefresh",
         name = "AutiRefresh",
         version = "0.0.1"
         )
