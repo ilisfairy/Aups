@@ -10,14 +10,13 @@ import net.mamoe.mirai.event.GlobalEventChannel
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.MessageSource
 import net.mamoe.mirai.message.data.MessageSource.Key.recall
+
 import java.io.File
 import java.util.*
 
-
-
 object PluginMain : KotlinPlugin(
     JvmPluginDescription(
-        id = "moe.nyadoki.AutiRefresh",
+        id = "moe.Nyadoki.AutiRefresh",
         name = "AutiRefresh",
         version = "0.0.1"
         )
