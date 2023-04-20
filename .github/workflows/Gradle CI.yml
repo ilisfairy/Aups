@@ -1,8 +1,6 @@
 name: Gradle CI
 
-# Controls when the action will run. 
 on:
-  # Triggers the workflow on push and pull request events but only for the master branch
   push:
     branches:
       - master
@@ -10,7 +8,6 @@ on:
     branches:
       - master
 
-  # Allows to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 jobs:
@@ -19,29 +16,30 @@ jobs:
 
     name: Gradle-Build
     
-    # The type of runner that the job will run on
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+
       - name: Checkout
-        uses: actions/checkout@v3
-
-      # Setup JDK
+        uses: actions/checkout@v3.3.0
+      
       - name: Setup Java JDK
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v3.10.0
         with:
-          java-version: 11
-          distribution: 'zulu'
-          cache: 'gradle'
-
-      # Validate Gradle Wrapper
+          java-version: '17'
+          distribution: 'temurin'
+      
       - name: Gradle Wrapper Validation
         uses: gradle/wrapper-validation-action@v1.0.5
-
-      # Build
+        
       - name: Make gradlew executable
         run: chmod +x ./gradlew
       - name: Build with Gradle
-        run: ./gradlew build
+        run: ./gradlew buildPlugin
+      
+      - name: Build
+        uses: actions/upload-artifact@v3.1.2
+        with: 
+          name: snapshot
+          path: build/mirai/*.jar
+          
