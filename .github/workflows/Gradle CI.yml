@@ -37,7 +37,7 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew buildPlugin
       
-      - name: Build
+      - name: Build Plugin
         uses: actions/upload-artifact@v3.1.2
         with: 
           name: snapshot
