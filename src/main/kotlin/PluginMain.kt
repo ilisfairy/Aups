@@ -3,6 +3,7 @@ package moe.kusuri.mirai.plugin.AutiRefresh
 import com.google.gson.Gson
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
+import net.mamoe.mirai.contact.Group
 import net.mamoe.mirai.contact.PermissionDeniedException
 import net.mamoe.mirai.event.GlobalEventChannel
 import net.mamoe.mirai.event.events.GroupMessageEvent
@@ -55,8 +56,8 @@ object PluginMain : KotlinPlugin(
         logger.info ("清空缓存任务启动于${getTime(h, m, s)}，每隔${period}ms执行一次")
         logger.info ("撤回阈值为$n")
 
-        fun recall() {
-            with(STCache[ this.group.id ]!!) {
+        fun recall(group: Group) {
+            with(STCache[  group.id  ]!!) {
                 for (i in 1 until num - 1) {
                     try {
                         source[i].recall()
@@ -113,3 +114,9 @@ object PluginMain : KotlinPlugin(
         }
     }
 }
+
+private fun Any.recall() {
+    TODO("Not yet implemented")
+}
+
+
