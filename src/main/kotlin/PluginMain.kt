@@ -28,6 +28,7 @@ object PluginMain : KotlinPlugin(
     )
     private val STCache = mutableMapOf<Long, Msg>()
     private val LTCache = arrayListOf<Msg>()
+    private fun Any.recall() = Unit
     private fun getTime(hour: Int, min: Int, sec: Int) = Calendar.getInstance().apply {
         set(Calendar.HOUR_OF_DAY, hour)
         set(Calendar.MINUTE, min)
@@ -57,7 +58,7 @@ object PluginMain : KotlinPlugin(
         logger.info ("撤回阈值为$n")
 
         fun recall(group: Group) {
-            with(STCache[  group.id  ]!!) {
+            with(STCache[group.id]!!) {
                 for (i in 1 until num - 1) {
                     try {
                         source[i].recall()
@@ -114,10 +115,3 @@ object PluginMain : KotlinPlugin(
         }
     }
 }
-
-private fun Any.recall() {
-}
-
-
-
-
