@@ -1,9 +1,10 @@
 pluginManagement {
     repositories {
-        mavenLocal()
         gradlePluginPortal()
+        maven("https://repo.mirai.mamoe.net/snapshots")
+        mavenLocal()
         mavenCentral()
         maven("https://dl.bintray.com/kotlin/kotlin-eap")
     }
 }
-rootProject.name = "AutiRefresh"
+rootProject.name = "mirai-AutiRefresh-plugin"
