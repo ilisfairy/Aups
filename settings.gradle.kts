@@ -1,5 +1,7 @@
 pluginManagement {
     repositories {
+        gradlePluginPortal()
+        maven("https://repo.mirai.mamoe.net/snapshots")
         mavenLocal()
         gradlePluginPortal()
         mavenCentral()
