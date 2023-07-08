@@ -35,14 +35,6 @@ object PluginMain : KotlinPlugin(
         set(Calendar.SECOND, sec)
     }.time
     override fun onEnable() {
-        val file = File("${configFolder.absolutePath}\\config.json")
-        logger.info ("配置文件目录${configFolder.absolutePath}\\config.json")
-        val config = if(file.isFile && file.exists())
-            Gson().fromJson(file.readText(), Config:: class.java )
-        else {
-            logger.warning("找不到配置文件, 使用默认文件")
-            Config(null, null, null, null, null)
-        }
         val n = config.max?: 4
         val h = config.hour ?: 20
         val m = config.min ?: 0
