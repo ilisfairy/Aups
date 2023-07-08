@@ -1,4 +1,4 @@
-package moe.kusuri.mirai.plugin.AutiRefresh
+package moe.kusuri.Aups
 
 data class Config(
     val max:Int?,
