@@ -25,7 +25,7 @@ jobs:
         uses: actions/checkout@v4.1.1
       
       - name: Setup Java JDK
-        uses: actions/setup-java@v3.13.0
+        uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
@@ -37,7 +37,7 @@ jobs:
         run: ./gradlew buildPlugin
       
       - name: Upload Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with: 
           name: snapshot
           path: build/mirai/*.jar

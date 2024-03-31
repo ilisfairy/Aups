@@ -1,5 +1,5 @@
 plugins {
-    val kotlinVersion = "1.9.21"
+    val kotlinVersion = "1.9.23"
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.serialization") version kotlinVersion
 
@@ -16,6 +16,6 @@ repositories {
     mavenCentral()
 }
 dependencies{
-    implementation("com.google.code.gson:gson:2.8.9")
+    implementation("com.google.code.gson:gson:2.10.1")
     implementation(kotlin("stdlib-jdk8"))
 }
